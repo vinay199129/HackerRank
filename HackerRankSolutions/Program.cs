@@ -165,6 +165,123 @@ namespace HackerRankSolutions
             return updArray.ToArray();
         }
 
+        // Complete the minimumBribes function below.
+        static void MinimumBribes(int[] q)
+        {
+            int minBribes = 0;
+            bool isTooChaotic = false;
+            for (int i = 0; i < q.Length; i++)
+            {
+                if (q[i] > (i + 1) + 2)
+                {
+                    isTooChaotic = true;
+                    break;
+                }
+                for (int j = Math.Max(0, q[i] - 2); j < i; j++)
+                {
+                    if (q[j] > q[i]) { minBribes++; }
+                }
+
+            }
+            Console.WriteLine(isTooChaotic ? "Too chaotic" : minBribes.ToString());
+        }
+
+        // Complete the minimumSwaps function below.
+        static int MinimumSwaps(int[] arr)
+        {
+            int swaps = 0;
+            int tmp;
+            for (int i = 0; i < arr.Length - 1; i++)
+            {
+                while (arr[i] != i + 1)
+                {
+                    tmp = arr[arr[i] - 1];
+                    arr[arr[i] - 1] = arr[i];
+                    arr[i] = tmp;
+                    swaps++;
+                }
+            }
+            return swaps;
+        }
+
+        // Complete the arrayManipulation function below.
+        static long ArrayManipulation(int n, int[][] queries)
+        {
+            var data = new int[n + 1];
+            for (int i = 0; i < queries.Length; i++)
+            {
+                int a = queries[i][0];
+                int b = queries[i][1];
+                int k = queries[i][2];
+                data[a - 1] += k;
+                data[b] -= k;
+            }
+            long sum = 0;
+            long max = 0;
+            foreach (var num in data)
+            {
+                sum += num;
+                if (max < sum)
+                    max = sum;
+            }
+            return max;
+        }
+
+        // Complete the reverseArray function below.
+        static int[] ReverseArray(int[] a)
+        {
+            int[] reversedArr = new int[a.Length];
+            for (int i = 0; i < a.Length; i++)
+            {
+                reversedArr[i] = a[a.Length - i - 1];
+            }
+            return reversedArr;
+        }
+
+        /// <summary>
+        /// Gets the median value from an array
+        /// </summary>
+        /// <typeparam name="T">The array type</typeparam>
+        /// <param name="sourceArray">The source array</param>
+        /// <param name="cloneArray">If it doesn't matter if the source array is sorted, you can pass false to improve performance</param>
+        /// <returns></returns>
+        public static T GetMedian<T>(T[] sourceArray, bool cloneArray = true) where T : IComparable<T>
+        {
+            //Framework 2.0 version of this method. there is an easier way in F4        
+            if (sourceArray == null || sourceArray.Length == 0)
+                throw new ArgumentException("Median of empty array not defined.");
+
+            //make sure the list is sorted, but use a new array
+            T[] sortedArray = cloneArray ? (T[])sourceArray.Clone() : sourceArray;
+            Array.Sort(sortedArray);
+
+            //get the median
+            int size = sortedArray.Length;
+            int mid = size / 2;
+            if (size % 2 != 0)
+                return sortedArray[mid];
+
+            dynamic value1 = sortedArray[mid];
+            dynamic value2 = sortedArray[mid - 1];
+            return (sortedArray[mid] + value2) * 0.5;
+        }
+
+        // Complete the activityNotifications function below.
+        static int ActivityNotifications(int[] expenditure, int d)
+        {
+            int notificationCount = 0, currentMedian = 0, currentDay = 0;
+
+            for (int i = d; i < expenditure.Length; i++)
+            {
+                currentMedian = GetMedian<int>(expenditure.Skip(currentDay).Take(d).ToArray());
+                if (expenditure[i] >= currentMedian * 2) {
+                    notificationCount++;
+                }
+                currentDay++;
+            }
+            return notificationCount;
+        }
+
 
         static void Main(string[] args)
         {
@@ -208,15 +325,66 @@ namespace HackerRankSolutions
             //int result = HourglassSum(arr);
 
             //rotLeft function
+            //string[] nd = Console.ReadLine().Split(' ');
+
+            //int n = Convert.ToInt32(nd[0]);
+
+            //int d = Convert.ToInt32(nd[1]);
+
+            //int[] a = Array.ConvertAll(Console.ReadLine().Split(' '), aTemp => Convert.ToInt32(aTemp));
+            //int[] result = RotLeft(a, d);
+
+            //Min Bribes
+            //int t = Convert.ToInt32(Console.ReadLine());
+
+            //for (int tItr = 0; tItr < t; tItr++)
+            //{
+            //    int n = Convert.ToInt32(Console.ReadLine());
+
+            //    int[] q = Array.ConvertAll(Console.ReadLine().Split(' '), qTemp => Convert.ToInt32(qTemp));
+            //    MinimumBribes(q);
+            //}
+
+            // Complete the minimumSwaps function below.
+            //int n = Convert.ToInt32(Console.ReadLine());
+
+            //int[] arr = Array.ConvertAll(Console.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
+
+            //int res = MinimumSwaps(arr);
+
+
+            // Complete the arrayManipulation function below.
+            //string[] nm = Console.ReadLine().Split(' ');
+
+            //int n = Convert.ToInt32(nm[0]);
+
+            //int m = Convert.ToInt32(nm[1]);
+
+            //int[][] queries = new int[m][];
+
+            //for (int i = 0; i < m; i++)
+            //{
+            //    queries[i] = Array.ConvertAll(Console.ReadLine().Split(' '), queriesTemp => Convert.ToInt32(queriesTemp));
+            //}
+
+            //long result = ArrayManipulation(n, queries);
+
+            // Complete the reverseArray function below.
+            //int arrCount = Convert.ToInt32(Console.ReadLine());
+
+            //int[] arr = Array.ConvertAll(Console.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
+            //int[] res = ReverseArray(arr);
+
+            // Complete the activityNotifications function below.
             string[] nd = Console.ReadLine().Split(' ');
 
             int n = Convert.ToInt32(nd[0]);
 
             int d = Convert.ToInt32(nd[1]);
 
-            int[] a = Array.ConvertAll(Console.ReadLine().Split(' '), aTemp => Convert.ToInt32(aTemp));
-            int[] result = RotLeft(a, d);
+            int[] expenditure = Array.ConvertAll(Console.ReadLine().Split(' '), expenditureTemp => Convert.ToInt32(expenditureTemp));
 
+            int result = ActivityNotifications(expenditure, d);
         }
     }
 }
