@@ -238,48 +238,51 @@ namespace HackerRankSolutions
             return reversedArr;
         }
 
-        /// <summary>
-        /// Gets the median value from an array
-        /// </summary>
-        /// <typeparam name="T">The array type</typeparam>
-        /// <param name="sourceArray">The source array</param>
-        /// <param name="cloneArray">If it doesn't matter if the source array is sorted, you can pass false to improve performance</param>
-        /// <returns></returns>
-        public static T GetMedian<T>(T[] sourceArray, bool cloneArray = true) where T : IComparable<T>
+
+        static float Median(int[] count, int d)
         {
-            //Framework 2.0 version of this method. there is an easier way in F4        
-            if (sourceArray == null || sourceArray.Length == 0)
-                throw new ArgumentException("Median of empty array not defined.");
-
-            //make sure the list is sorted, but use a new array
-            T[] sortedArray = cloneArray ? (T[])sourceArray.Clone() : sourceArray;
-            Array.Sort(sortedArray);
-
-            //get the median
-            int size = sortedArray.Length;
-            int mid = size / 2;
-            if (size % 2 != 0)
-                return sortedArray[mid];
-
-            dynamic value1 = sortedArray[mid];
-            dynamic value2 = sortedArray[mid - 1];
-            return (sortedArray[mid] + value2) * 0.5;
+            int d2 = (d + 1) / 2;
+            for (int i = 0; i < count.Length; i++)
+            {
+                if (count[i] > d2)
+                {
+                    return i;
+                }
+                if (count[i] == d2)
+                {
+                    if (d % 2 != 0)
+                        return i;
+                    for (int j = i + 1; j < count.Length; j++)
+                    {
+                        if (count[j] > 0)
+                            return (i + j) / 2.0f;
+                    }
+                }
+                d2 -= count[i];
+            }
+            return 0;
         }
+
 
         // Complete the activityNotifications function below.
         static int ActivityNotifications(int[] expenditure, int d)
         {
-            int notificationCount = 0, currentMedian = 0, currentDay = 0;
+            int result = 0;
+            int[] count = new int[201];
 
-            for (int i = d; i < expenditure.Length; i++)
+            for (int i = 0; i < expenditure.Length; i++)
             {
-                currentMedian = GetMedian<int>(expenditure.Skip(currentDay).Take(d).ToArray());
-                if (expenditure[i] >= currentMedian * 2) {
-                    notificationCount++;
+                int v = expenditure[i];
+                if (i >= d)
+                {
+                    var m = Median(count, d);
+                    if (v >= 2 * m)
+                        result++;
+                    count[expenditure[i - d]]--;
                 }
-                currentDay++;
+                count[v]++;
             }
-            return notificationCount;
+            return result;
         }
 
 
